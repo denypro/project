@@ -14,16 +14,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 enum Role {
   ADMIN
   USER
 }
 
 model Usuario {
-  id    String @id @default(uuid())
-  nome  String?
-  email String? @unique
-  senha String?
-  role  Role   @default(USER)
+  id Int @id @default(autoincrement())
+
+  nome     String?
+  email    String? @unique
+  password String
+  role     Role    @default(USER)
+  Post     Post[]
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String
+  usuarioId Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id]) // <- Chave estrangeira para User
 }
